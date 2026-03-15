@@ -154,6 +154,13 @@
             to { opacity: 1; transform: scale(1.1); }
         }
 
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 242, 255, 0.3) rgba(0, 0, 0, 0.2);
+            touch-action: pan-y;
+            pointer-events: auto;
+            overscroll-behavior: contain;
+        }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 242, 255, 0.3); border-radius: 10px; }
@@ -171,7 +178,6 @@
     <div id="hud" class="ui-overlay hidden">
         <div class="stats-container">
             <div class="flex flex-col">
-                <!-- SCORE COLOR CHANGED TO WHITE FOR BETTER VISIBILITY -->
                 <div id="scoreDisplay" class="text-lg md:text-xl font-bold text-white" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">SCORE: 00000</div>
                 <div id="topScoreDisplayHUD" class="text-[10px] md:text-sm opacity-70">BEST: 00000</div>
                 <div class="flex items-center mt-1 md:mt-2 gap-1 md:gap-2">
@@ -242,7 +248,22 @@
 
             <section class="mb-8">
                 <h3 class="text-lg md:text-xl font-bold neon-text-teal mb-2 uppercase">3. Modular Weapon Systems</h3>
-                <p>The <span class="text-white">Prism Array</span> enters the field after <span class="text-white">Level 10</span>. Power tiers (1-5) are persistent throughout the run. Tier 5 triggers a limited-duration Max Power state.</p>
+                <p class="mb-4">The <span class="text-white">Prism Array</span> enters the field after <span class="text-white">Level 10</span>. Power tiers (1-5) are persistent throughout the run. Tier 5 triggers a limited-duration Max Power state.</p>
+                <p>The <span class="text-magenta-400 font-bold" style="color:#ff00ff;">Void Hunter</span> joins the Perk Pool after <span class="text-white">Level 15</span>. It is an autonomous hunter-seeker that clears hostiles independently.</p>
+            </section>
+
+            <section>
+                <h3 class="text-lg md:text-xl font-bold neon-text-pink mb-2 uppercase">4. Icon Recognition</h3>
+                <div class="grid grid-cols-2 gap-2 text-[10px] md:text-xs">
+                    <div class="flex items-center gap-2"><span>🔲</span> Pulse Cell</div>
+                    <div class="flex items-center gap-2"><span class="text-purple-500">⬢</span> Kinetic Armor</div>
+                    <div class="flex items-center gap-2"><span class="text-orange-500">◈</span> Nova Bomb</div>
+                    <div class="flex items-center gap-2"><span class="text-yellow-400">⏵</span> Combat Drone</div>
+                    <div class="flex items-center gap-2"><span class="text-teal-400">✚</span> Prism Array</div>
+                    <div class="flex items-center gap-2"><span class="text-blue-400">⦾</span> Decoy Beacon</div>
+                    <div class="flex items-center gap-2"><span class="text-pink-500">✴</span> Void Hunter</div>
+                    <div class="flex items-center gap-2"><span class="text-white">⬤</span> Omega Pulse</div>
+                </div>
             </section>
         </div>
         <button id="closeManualBtn" class="neon-button mt-8">Return</button>
@@ -457,7 +478,21 @@
             updateLeaderboardUI();
             window.addEventListener('resize', resize);
             window.addEventListener('mousemove', e => { player.targetX = e.clientX; player.targetY = e.clientY; });
-            window.addEventListener('touchmove', e => { e.preventDefault(); player.targetX = e.touches[0].clientX; player.targetY = e.touches[0].clientY; }, { passive: false });
+            
+            // Fixed TouchMove to allow scrolling in Briefing
+            window.addEventListener('touchmove', e => { 
+                if (gameState === 'PLAYING') {
+                    e.preventDefault(); 
+                } else {
+                    // Check if we are touching the scrollable area
+                    const isScrollable = e.target.closest('.custom-scrollbar');
+                    if (isScrollable) return; // Allow default scrolling
+                    e.preventDefault();
+                }
+                
+                player.targetX = e.touches[0].clientX; 
+                player.targetY = e.touches[0].clientY; 
+            }, { passive: false });
             
             document.getElementById('startButton').addEventListener('click', () => { AudioEngine.init(); startGame(); });
             continueButton.addEventListener('click', resumeFromIntermission);
