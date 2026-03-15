@@ -31,10 +31,14 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px md:padding: 20px;
+            padding: 10px;
             color: #00f2ff;
             text-shadow: 0 0 10px rgba(0, 242, 255, 0.7);
             z-index: 5;
+        }
+
+        @media (min-width: 768px) {
+            .ui-overlay { padding: 20px; }
         }
 
         .menu-screen {
@@ -126,12 +130,14 @@
         .prism-pip {
             width: 10px;
             height: 4px;
-            md:width: 14px;
-            md:height: 6px;
             border: 1px solid rgba(0, 255, 204, 0.3);
             border-radius: 1px;
             transition: all 0.3s ease;
         }
+        @media (min-width: 768px) {
+            .prism-pip { width: 14px; height: 6px; }
+        }
+
         .prism-pip.active {
             background: #00ffcc;
             box-shadow: 0 0 10px #00ffcc;
@@ -152,6 +158,10 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 242, 255, 0.3); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 242, 255, 0.5); }
+
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .leaderboard-table th { text-align: left; border-bottom: 1px solid rgba(0, 242, 255, 0.3); padding: 8px; color: #00f2ff; }
+        .leaderboard-table td { padding: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
 </head>
 <body>
@@ -161,7 +171,8 @@
     <div id="hud" class="ui-overlay hidden">
         <div class="stats-container">
             <div class="flex flex-col">
-                <div id="scoreDisplay" class="text-lg md:text-xl font-bold">SCORE: 00000</div>
+                <!-- SCORE COLOR CHANGED TO WHITE FOR BETTER VISIBILITY -->
+                <div id="scoreDisplay" class="text-lg md:text-xl font-bold text-white" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">SCORE: 00000</div>
                 <div id="topScoreDisplayHUD" class="text-[10px] md:text-sm opacity-70">BEST: 00000</div>
                 <div class="flex items-center mt-1 md:mt-2 gap-1 md:gap-2">
                     <span class="text-[8px] md:text-[10px] uppercase tracking-tighter opacity-60 neon-text-teal">Tier</span>
@@ -203,7 +214,7 @@
         <div class="flex flex-col items-center space-y-4">
             <button id="startButton" class="neon-button">Initiate System</button>
             <button id="openManualBtn" class="neon-button tertiary">Tactical Briefing</button>
-            <button id="openArchivesBtn" class="neon-button secondary">Data Archives</button>
+            <button id="openArchivesBtn" class="neon-button secondary">Leaderboard</button>
         </div>
     </div>
 
@@ -237,9 +248,9 @@
         <button id="closeManualBtn" class="neon-button mt-8">Return</button>
     </div>
 
-    <!-- Archives -->
+    <!-- Leaderboard -->
     <div id="archivesMenu" class="menu-screen hidden">
-        <h2 class="text-4xl font-bold neon-text-pink mb-8 uppercase tracking-widest">Archives</h2>
+        <h2 class="text-4xl font-bold neon-text-pink mb-8 uppercase tracking-widest">Leaderboard</h2>
         <div class="w-full max-w-md bg-gray-900/60 p-6 border border-pink-500/30 rounded-lg">
             <table class="leaderboard-table">
                 <thead><tr><th>RANK</th><th>SCORE</th><th>LVL</th></tr></thead>
